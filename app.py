@@ -1,5 +1,5 @@
 import streamlit as st
-
+import joblib
 # Configuração inicial da página
 st.set_page_config(
     page_title="Classificador de Flores Iris",
@@ -91,16 +91,24 @@ st.write(dados_iris)
 botao_adivinhar = st.button("🔍 Adivinhar espécie da flor", type="primary")
 
 if botao_adivinhar:
-    st.success("Botão funcionando! Aqui futuramente o modelo fará a previsão.")
-
-    st.write("Os dados enviados para o modelo seriam:")
-
+    modelo = joblib.load("modelos\\knn_flores_iris.joblib")
+    
     entrada_modelo = [[
         sepal_length,
         sepal_width,
         petal_length,
         petal_width
     ]]
+    previsão = modelo.predict(entrada_modelo)[0]
+    if previsão == 0:
+        st.title("setosa")
+        st.image("https://th.bing.com/th/id/OIP.5hwM8IiYNrBYqYP4aHWK1AHaFh?w=265&h=197&c=7&r=0&o=7&pid=1.7&rm=3")
+    elif previsão == 1:
+        st.title("versicolor")
+        st.image("https://th.bing.com/th/id/OIP.RwgtFmwDoPiXY-FU735vewHaHa?w=201&h=200&c=7&r=0&o=7&pid=1.7&rm=3")
+    else:
+        st.title("virgilica")
+        st.image("https://th.bing.com/th/id/OIP.1Nf75qITrqW2dIADHZdRYAHaE8?w=274&h=183&c=7&r=0&o=7&pid=1.7&rm=3")
 
     st.code(entrada_modelo, language="python")
 
@@ -113,7 +121,4 @@ if botao_adivinhar:
 
 st.divider()
 
-# Rodapé didático
-st.caption(
-    "Projeto didático com Streamlit + Scikit-Learn — Dataset Iris"
-)
+#
